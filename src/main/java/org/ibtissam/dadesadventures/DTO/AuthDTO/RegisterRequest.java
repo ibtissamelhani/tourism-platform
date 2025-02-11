@@ -12,7 +12,6 @@ import org.ibtissam.dadesadventures.validation.EnumValue;
 @Builder
 public class RegisterRequest {
 
-
     @NotBlank(message = "first name cannot be blank")
     private String firstName;
 
@@ -20,7 +19,10 @@ public class RegisterRequest {
     private String lastName;
 
     @NotBlank(message = "phone number cannot be blank")
-    private String phoneNumber;
+    @Pattern(
+            regexp = "^\\+?[0-9]{10,15}$",
+            message = "phone number must be between 10 and 15 digits and can start with a '+'"
+    )private String phoneNumber;
 
     @Email(message = "invalid email format")
     @NotBlank(message = "email cannot be blank")
@@ -34,10 +36,4 @@ public class RegisterRequest {
     )
     private String password;
 
-
-    @NotNull(message = "role cannot be null")
-    @EnumValue(enumClass = Role.class, message = "invalid role")
-    private String role;
-
-    private boolean isActive;
 }
