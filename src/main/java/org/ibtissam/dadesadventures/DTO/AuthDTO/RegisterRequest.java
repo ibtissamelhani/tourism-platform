@@ -22,7 +22,8 @@ public class RegisterRequest {
     @Pattern(
             regexp = "^\\+?[0-9]{10,15}$",
             message = "phone number must be between 10 and 15 digits and can start with a '+'"
-    )private String phoneNumber;
+    )
+    private String phoneNumber;
 
     @Email(message = "invalid email format")
     @NotBlank(message = "email cannot be blank")
