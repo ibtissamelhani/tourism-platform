@@ -2,14 +2,17 @@ package org.ibtissam.dadesadventures.service.implementation;
 
 import lombok.RequiredArgsConstructor;
 import org.ibtissam.dadesadventures.domain.entities.Category;
+import org.ibtissam.dadesadventures.exception.category.CategoryAlreadyExistException;
 import org.ibtissam.dadesadventures.exception.category.CategoryNotFoundException;
 import org.ibtissam.dadesadventures.repository.CategoryRepository;
 import org.ibtissam.dadesadventures.service.CategoryService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
+@Service
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
 
@@ -28,12 +31,18 @@ public class CategoryServiceImpl implements CategoryService {
     }
     @Override
     public Category create(Category category) {
+        if (categoryRepository.existsByName(category.getName())) {
+            throw new CategoryAlreadyExistException("Category with name '" + category.getName() + "' already exists.");
+        }
         return categoryRepository.save(category);
     }
 
     @Override
     public Category update(UUID id, Category categoryRequest) {
         Category existingCategory = findById(id);
+        if (categoryRepository.existsByName(categoryRequest.getName())) {
+            throw new CategoryAlreadyExistException("Category with name '" + categoryRequest.getName() + "' already exists.");
+        }
         existingCategory.setName(categoryRequest.getName());
         return categoryRepository.save(existingCategory);
     }

@@ -1,5 +1,7 @@
 package org.ibtissam.dadesadventures.web.errors;
 
+import org.ibtissam.dadesadventures.exception.category.CategoryAlreadyExistException;
+import org.ibtissam.dadesadventures.exception.category.CategoryNotFoundException;
 import org.ibtissam.dadesadventures.exception.user.EmailAlreadyExistException;
 import org.ibtissam.dadesadventures.exception.user.InvalidCredentialsException;
 import org.ibtissam.dadesadventures.exception.user.UserNotFoundException;
@@ -31,13 +33,24 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(EmailAlreadyExistException.class)
     public ResponseEntity<String> handleEmailAlreadyExistException(EmailAlreadyExistException ex) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
     }
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<String> handleUserNotFoundException(UserNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
+
+    @ExceptionHandler(CategoryNotFoundException.class)
+    public ResponseEntity<String> handleCategoryNotFoundException(CategoryNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(CategoryAlreadyExistException.class)
+    public ResponseEntity<String> handleCategoryAlreadyExistException(CategoryAlreadyExistException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+    }
+
 
 
 

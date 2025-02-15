@@ -1,6 +1,7 @@
 package org.ibtissam.dadesadventures.domain.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.util.UUID;
@@ -18,6 +19,7 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @NotBlank(message = "category name cannot be blank")
     @Column(nullable = false, unique = true)
     private String name;
 }

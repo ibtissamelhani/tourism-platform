@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
-@Service
+
 public interface CategoryService {
     Category findById(UUID id);
     Category create(Category category);
