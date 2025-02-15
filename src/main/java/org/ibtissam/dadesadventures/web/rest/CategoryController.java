@@ -2,7 +2,6 @@ package org.ibtissam.dadesadventures.web.rest;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.ibtissam.dadesadventures.domain.entities.Category;
 import org.ibtissam.dadesadventures.service.CategoryService;
 import org.springframework.data.domain.Page;
@@ -12,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -47,5 +47,14 @@ public class CategoryController {
     public ResponseEntity<String> deleteCategory(@PathVariable UUID id) {
         categoryService.delete(id);
         return ResponseEntity.ok("Category deleted successfully.");
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<Category>> searchCategory(@RequestParam("name") String name) {
+        List<Category> categories = categoryService.searchByName(name);
+        if (categories.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(categories);
     }
 }

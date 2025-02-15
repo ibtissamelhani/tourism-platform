@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 
@@ -14,4 +15,5 @@ public interface CategoryService {
     Category update(UUID id, Category categoryRequest);
     void delete(UUID id);
     Page<Category> findAll(Pageable pageable);
+    List<Category> searchByName(String name);
 }

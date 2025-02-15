@@ -1,4 +1,4 @@
-package org.ibtissam.dadesadventures.DTO.AuthDTO;
+package org.ibtissam.dadesadventures.DTO.Auth;
 
 import lombok.*;
 
