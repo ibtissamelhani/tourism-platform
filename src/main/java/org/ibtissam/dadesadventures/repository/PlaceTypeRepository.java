@@ -6,4 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.UUID;
 
 public interface PlaceTypeRepository extends JpaRepository<PlaceType, UUID> {
+    boolean existsByName(String name);
 }

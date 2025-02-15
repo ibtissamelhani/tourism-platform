@@ -2,6 +2,8 @@ package org.ibtissam.dadesadventures.web.errors;
 
 import org.ibtissam.dadesadventures.exception.category.CategoryAlreadyExistException;
 import org.ibtissam.dadesadventures.exception.category.CategoryNotFoundException;
+import org.ibtissam.dadesadventures.exception.place.TypeAlreadyExistException;
+import org.ibtissam.dadesadventures.exception.place.TypeNotFoundException;
 import org.ibtissam.dadesadventures.exception.user.EmailAlreadyExistException;
 import org.ibtissam.dadesadventures.exception.user.InvalidCredentialsException;
 import org.ibtissam.dadesadventures.exception.user.UserNotFoundException;
@@ -26,6 +28,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 
+    // handel user exceptions
     @ExceptionHandler(InvalidCredentialsException.class)
     public ResponseEntity<String> handleInvalidCredentialsException(InvalidCredentialsException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
@@ -41,6 +44,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 
+    // handel category exceptions
     @ExceptionHandler(CategoryNotFoundException.class)
     public ResponseEntity<String> handleCategoryNotFoundException(CategoryNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
@@ -49,6 +53,17 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(CategoryAlreadyExistException.class)
     public ResponseEntity<String> handleCategoryAlreadyExistException(CategoryAlreadyExistException ex) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+    }
+
+    // handel place exceptions
+    @ExceptionHandler(TypeAlreadyExistException.class)
+    public ResponseEntity<String> handleTypeAlreadyExistException(TypeAlreadyExistException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(TypeNotFoundException.class)
+    public ResponseEntity<String> handleTypeNotFoundException(TypeNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 
 

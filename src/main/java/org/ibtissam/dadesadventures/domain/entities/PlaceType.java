@@ -1,6 +1,7 @@
 package org.ibtissam.dadesadventures.domain.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.util.UUID;
@@ -18,5 +19,6 @@ public class PlaceType {
     private UUID id;
 
     @Column(nullable = false, unique = true)
+    @NotBlank(message = "type name cannot be blank")
     private String name;
 }
