@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -51,6 +52,11 @@ public class CategoryServiceImpl implements CategoryService {
     public void delete(UUID id) {
         Category category = findById(id);
         categoryRepository.delete(category);
+    }
+
+    @Override
+    public List<Category> searchByName(String name) {
+        return categoryRepository.findByNameContainingIgnoreCase(name);
     }
 
 }

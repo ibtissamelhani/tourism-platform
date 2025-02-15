@@ -7,6 +7,6 @@ import java.util.List;
 import java.util.UUID;
 
 public interface CategoryRepository  extends JpaRepository<Category, UUID> {
-    List<Category> findByName(String name);
+    List<Category> findByNameContainingIgnoreCase(String name);
     boolean existsByName(String name);
 }
