@@ -2,7 +2,6 @@ package org.ibtissam.dadesadventures.web.rest;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.ibtissam.dadesadventures.domain.entities.Category;
 import org.ibtissam.dadesadventures.service.CategoryService;
 import org.springframework.data.domain.Page;
