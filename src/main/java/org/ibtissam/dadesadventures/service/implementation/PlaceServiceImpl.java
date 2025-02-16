@@ -52,6 +52,10 @@ public class PlaceServiceImpl implements PlaceService {
                 .orElseThrow(() -> new PlaceNotFoundException("Place not found with ID: " + id));
         return placeDTOMapper.toResponse(place);
     }
+    public Place findById(UUID id) {
+        return placeRepository.findById(id)
+                .orElseThrow(() -> new PlaceNotFoundException("Place not found with ID: " + id));
+    }
 
     @Override
     public PlaceResponse updatePlace(UUID id, PlaceRequest placeRequest) {
