@@ -4,6 +4,7 @@ import jakarta.validation.constraints.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -41,4 +42,6 @@ public class ActivityRequest {
     private UUID placeId;
 
     private UUID guideId;
+
+    private List<String> imageUrls;
 }

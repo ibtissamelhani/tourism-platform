@@ -1,8 +1,11 @@
 package org.ibtissam.dadesadventures.DTO.Activity;
 
 import org.ibtissam.dadesadventures.domain.entities.Activity;
+import org.ibtissam.dadesadventures.domain.entities.ActivityImage;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+
+import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface ActivityDTOMapper {
@@ -15,6 +18,9 @@ public interface ActivityDTOMapper {
     @Mapping(target = "categoryName", source = "category.name")
     @Mapping(target = "placeName", source = "place.name")
     @Mapping(target = "guideName", source = "guide.email", defaultValue = "No Guide Assigned")
+    @Mapping(target = "imageUrls", expression = "java(activity.getImages().stream().map(img -> img.getImageUrl()).toList())")
     ActivityResponse toResponse(Activity activity);
+
+
 
 }
