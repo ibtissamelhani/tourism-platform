@@ -4,12 +4,14 @@ import lombok.RequiredArgsConstructor;
 import org.ibtissam.dadesadventures.DTO.Activity.ActivityDTOMapper;
 import org.ibtissam.dadesadventures.DTO.Activity.ActivityRequest;
 import org.ibtissam.dadesadventures.DTO.Activity.ActivityResponse;
+import org.ibtissam.dadesadventures.DTO.Activity.ActivitySearchDTO;
 import org.ibtissam.dadesadventures.domain.entities.*;
-import org.ibtissam.dadesadventures.exception.ActivityNotFoundException;
+import org.ibtissam.dadesadventures.exception.activity.ActivityNotFoundException;
 import org.ibtissam.dadesadventures.repository.ActivityImageRepository;
 import org.ibtissam.dadesadventures.repository.ActivityRepository;
 import org.ibtissam.dadesadventures.service.*;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -89,7 +91,6 @@ public class ActivityServiceImpl implements ActivityService {
         Activity activity = activityRepository.findById(id)
                 .orElseThrow(() -> new ActivityNotFoundException("Activity not found with ID: " + id));
 
-        // Retrieve associated entities
         Category category = categoryService.findById(request.getCategoryId());
         Place place = placeService.findById(request.getPlaceId());
 
@@ -109,7 +110,6 @@ public class ActivityServiceImpl implements ActivityService {
         activity.setGuide(guide);
         activity.setUpdatedAt(LocalDateTime.now());
 
-        // Update images if image URLs are provided
         if (request.getImageUrls() != null) {
             activity.getImages().clear();
             request.getImageUrls().forEach(url -> {
@@ -121,11 +121,24 @@ public class ActivityServiceImpl implements ActivityService {
             });
         }
 
-        // Save the updated activity
         Activity updatedActivity = activityRepository.save(activity);
         return activityMapper.toResponse(updatedActivity);
     }
 
+    @Override
+    public Page<ActivityResponse> searchActivities(ActivitySearchDTO searchDTO, Pageable pageable) {
+        List<Activity> activities = activityRepository.findByCriteria(searchDTO);
 
+        List<ActivityResponse> responses = activities.stream()
+                .map(activityMapper::toResponse)
+                .toList();
+
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), responses.size());
+
+        List<ActivityResponse> paginatedResponses = responses.subList(start, end);
+
+        return new PageImpl<>(paginatedResponses, pageable, responses.size());
+    }
 
 }

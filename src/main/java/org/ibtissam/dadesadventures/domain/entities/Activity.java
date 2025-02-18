@@ -9,12 +9,12 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
+@Table(name = "activities")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "activities")
 public class Activity {
 
     @Id

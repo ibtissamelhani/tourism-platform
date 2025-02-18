@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.ibtissam.dadesadventures.DTO.Activity.ActivityRequest;
 import org.ibtissam.dadesadventures.DTO.Activity.ActivityResponse;
+import org.ibtissam.dadesadventures.DTO.Activity.ActivitySearchDTO;
 import org.ibtissam.dadesadventures.service.ActivityService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -42,5 +43,13 @@ public class ActivityController {
                                                            @Valid @RequestBody ActivityRequest request) {
         ActivityResponse response = activityService.updateActivity(id, request);
         return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<Page<ActivityResponse>> searchActivities(
+            @RequestBody ActivitySearchDTO searchDTO,
+            Pageable pageable) {
+
+        return ResponseEntity.ok(activityService.searchActivities(searchDTO, pageable));
     }
 }

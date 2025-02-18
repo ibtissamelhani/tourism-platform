@@ -1,6 +1,6 @@
 package org.ibtissam.dadesadventures.web.errors;
 
-import org.ibtissam.dadesadventures.exception.ActivityNotFoundException;
+import org.ibtissam.dadesadventures.exception.activity.ActivityNotFoundException;
 import org.ibtissam.dadesadventures.exception.category.CategoryAlreadyExistException;
 import org.ibtissam.dadesadventures.exception.category.CategoryNotFoundException;
 import org.ibtissam.dadesadventures.exception.place.PlaceNotFoundException;
