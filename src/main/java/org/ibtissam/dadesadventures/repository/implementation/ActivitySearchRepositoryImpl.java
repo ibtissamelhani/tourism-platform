@@ -37,9 +37,7 @@ public class ActivitySearchRepositoryImpl implements ActivitySearchRepository {
         if (searchDTO.getCategoryId() != null) {
             predicates.add(cb.equal(activity.get("category").get("id"), searchDTO.getCategoryId()));
         }
-        if (searchDTO.getPlaceId() != null) {
-            predicates.add(cb.equal(activity.get("place").get("id"), searchDTO.getPlaceId()));
-        }
+
         if (searchDTO.getStartDate() != null && searchDTO.getEndDate() != null) {
             predicates.add(cb.between(activity.get("date"), searchDTO.getStartDate(), searchDTO.getEndDate()));
         } else if (searchDTO.getStartDate() != null) {
