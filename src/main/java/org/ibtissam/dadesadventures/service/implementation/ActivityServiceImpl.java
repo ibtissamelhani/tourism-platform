@@ -7,6 +7,7 @@ import org.ibtissam.dadesadventures.DTO.Activity.ActivityResponse;
 import org.ibtissam.dadesadventures.DTO.Activity.ActivitySearchDTO;
 import org.ibtissam.dadesadventures.domain.entities.*;
 import org.ibtissam.dadesadventures.exception.activity.ActivityNotFoundException;
+import org.ibtissam.dadesadventures.exception.user.GuideIsBusyException;
 import org.ibtissam.dadesadventures.repository.ActivityImageRepository;
 import org.ibtissam.dadesadventures.repository.ActivityRepository;
 import org.ibtissam.dadesadventures.service.*;
@@ -40,6 +41,10 @@ public class ActivityServiceImpl implements ActivityService {
         User guide = null;
         if (request.getGuideId() != null) {
             guide = userService.findById(request.getGuideId());
+            boolean isBusy = activityRepository.isGuideBusy(request.getGuideId(), request.getDate());
+            if (isBusy) {
+                throw new GuideIsBusyException("guide is busy");
+            }
         }
         Activity activity = Activity.builder()
                 .name(request.getName())

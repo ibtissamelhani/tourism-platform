@@ -12,7 +12,6 @@ import java.util.UUID;
 public class ActivitySearchDTO {
     private String name;
     private UUID categoryId;
-    private UUID placeId;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
 }
