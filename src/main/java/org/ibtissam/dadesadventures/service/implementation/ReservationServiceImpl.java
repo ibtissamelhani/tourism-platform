@@ -13,9 +13,12 @@ import org.ibtissam.dadesadventures.repository.UserRepository;
 import org.ibtissam.dadesadventures.service.ActivityService;
 import org.ibtissam.dadesadventures.service.ReservationService;
 import org.ibtissam.dadesadventures.service.UserService;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -29,7 +32,15 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public ReservationResponse createReservation(ReservationRequest reservationRequest) {
-        User user = userService.findById(reservationRequest.getUserId());
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new RuntimeException("User not authenticated");
+        }
+
+        User userDetails = (User) authentication.getPrincipal();
+
+        User user = userService.findById(userDetails.getId());
 
         Activity activity = activityService.findById(reservationRequest.getActivityId());
 

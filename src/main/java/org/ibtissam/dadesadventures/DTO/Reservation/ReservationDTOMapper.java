@@ -10,7 +10,6 @@ public interface ReservationDTOMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
-    @Mapping(target = "user.id", source = "userId")
     @Mapping(target = "activity.id", source = "activityId")
     Reservation toEntity(ReservationRequest reservationRequest);
 

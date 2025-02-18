@@ -16,8 +16,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 public class ReservationRequest {
-    @NotNull(message = "User ID is required")
-    private UUID userId;
 
     @NotNull(message = "Activity ID is required")
     private UUID activityId;
