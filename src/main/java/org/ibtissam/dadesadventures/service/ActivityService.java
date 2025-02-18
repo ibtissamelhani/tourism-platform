@@ -3,6 +3,7 @@ package org.ibtissam.dadesadventures.service;
 import org.ibtissam.dadesadventures.DTO.Activity.ActivityRequest;
 import org.ibtissam.dadesadventures.DTO.Activity.ActivityResponse;
 import org.ibtissam.dadesadventures.DTO.Activity.ActivitySearchDTO;
+import org.ibtissam.dadesadventures.domain.entities.Activity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -16,4 +17,5 @@ public interface ActivityService {
     void deleteActivity(UUID id);
     ActivityResponse updateActivity(UUID id, ActivityRequest request);
     Page<ActivityResponse> searchActivities(ActivitySearchDTO searchDTO, Pageable pageable);
+    Activity findById(UUID id);
 }

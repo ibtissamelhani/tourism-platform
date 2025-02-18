@@ -55,8 +55,11 @@ public class Reservation {
         }
     }
 
-    private Double calculateTotalPrice(double activityPrice) {
-        totalPrice = activityPrice * numberOfParticipants;
-        return totalPrice;
+    public void calculateTotalPrice() {
+        if (this.activity != null && this.numberOfParticipants != null) {
+            this.totalPrice = this.activity.getPrice() * this.numberOfParticipants;
+        } else {
+            throw new IllegalStateException("Activity or number of participants is not set.");
+        }
     }
 }

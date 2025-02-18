@@ -25,8 +25,6 @@ public class ReservationRequest {
     @Positive(message = "Number of participants must be a positive value")
     private Integer numberOfParticipants;
 
-    @Positive(message = "Total price must be a positive value")
-    private Double totalPrice;
 
     @Future(message = "Reservation date must be in the future")
     private LocalDateTime reservationDate;

@@ -146,4 +146,10 @@ public class ActivityServiceImpl implements ActivityService {
         return new PageImpl<>(paginatedResponses, pageable, responses.size());
     }
 
+    @Override
+    public Activity findById(UUID id) {
+        return activityRepository.findById(id)
+                .orElseThrow(() -> new ActivityNotFoundException("activity not found"));
+    }
+
 }
