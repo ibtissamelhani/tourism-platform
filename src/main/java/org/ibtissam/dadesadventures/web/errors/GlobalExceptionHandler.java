@@ -1,5 +1,6 @@
 package org.ibtissam.dadesadventures.web.errors;
 
+import org.ibtissam.dadesadventures.exception.ActivityNotFoundException;
 import org.ibtissam.dadesadventures.exception.category.CategoryAlreadyExistException;
 import org.ibtissam.dadesadventures.exception.category.CategoryNotFoundException;
 import org.ibtissam.dadesadventures.exception.place.PlaceNotFoundException;
@@ -69,6 +70,13 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(PlaceNotFoundException.class)
     public ResponseEntity<String> handlePlaceNotFoundException(PlaceNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+    // handel activity exceptions
+
+    @ExceptionHandler(ActivityNotFoundException.class)
+    public ResponseEntity<String> handleActivityNotFoundException(ActivityNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 

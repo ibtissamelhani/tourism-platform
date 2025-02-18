@@ -5,9 +5,12 @@ import org.ibtissam.dadesadventures.DTO.Activity.ActivityDTOMapper;
 import org.ibtissam.dadesadventures.DTO.Activity.ActivityRequest;
 import org.ibtissam.dadesadventures.DTO.Activity.ActivityResponse;
 import org.ibtissam.dadesadventures.domain.entities.*;
+import org.ibtissam.dadesadventures.exception.ActivityNotFoundException;
 import org.ibtissam.dadesadventures.repository.ActivityImageRepository;
 import org.ibtissam.dadesadventures.repository.ActivityRepository;
 import org.ibtissam.dadesadventures.service.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -65,5 +68,19 @@ public class ActivityServiceImpl implements ActivityService {
         Activity savedActivity = activityRepository.save(activity);
 
         return activityMapper.toResponse(savedActivity);
+    }
+
+    @Override
+    public Page<ActivityResponse> getAllActivities(Pageable pageable) {
+        return activityRepository.findAll(pageable)
+                .map(activityMapper::toResponse);
+    }
+
+    @Override
+    public void deleteActivity(UUID id) {
+        if (!activityRepository.existsById(id)) {
+            throw new ActivityNotFoundException("Activity not found with ID: " + id);
+        }
+        activityRepository.deleteById(id);
     }
 }
