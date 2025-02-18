@@ -60,6 +60,12 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + id));
         return userDTOMapper.toUserDTO(user);
     }
+    @Override
+    public User findById(UUID id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + id));
+
+    }
 
     @Override
     public UserResponse getUserByEmail(String email) {

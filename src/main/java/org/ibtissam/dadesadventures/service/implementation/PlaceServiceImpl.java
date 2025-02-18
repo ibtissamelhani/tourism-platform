@@ -22,13 +22,13 @@ import java.util.UUID;
 public class PlaceServiceImpl implements PlaceService {
 
     private final PlaceRepository placeRepository;
-    private final PlaceTypeService placeTypeRepository;
+    private final PlaceTypeService placeTypeService;
     private final PlaceDTOMapper placeDTOMapper;
 
 
     @Override
     public PlaceResponse createPlace(PlaceRequest placeRequest) {
-        PlaceType placeType = placeTypeRepository.findById(placeRequest.getTypeId());
+        PlaceType placeType = placeTypeService.findById(placeRequest.getTypeId());
 
         Place place = Place.builder()
                 .name(placeRequest.getName())
@@ -52,13 +52,17 @@ public class PlaceServiceImpl implements PlaceService {
                 .orElseThrow(() -> new PlaceNotFoundException("Place not found with ID: " + id));
         return placeDTOMapper.toResponse(place);
     }
+    public Place findById(UUID id) {
+        return placeRepository.findById(id)
+                .orElseThrow(() -> new PlaceNotFoundException("Place not found with ID: " + id));
+    }
 
     @Override
     public PlaceResponse updatePlace(UUID id, PlaceRequest placeRequest) {
         Place place = placeRepository.findById(id)
                 .orElseThrow(() -> new PlaceNotFoundException("Place not found with ID: " + id));
 
-        PlaceType placeType = placeTypeRepository.findById(placeRequest.getTypeId());
+        PlaceType placeType = placeTypeService.findById(placeRequest.getTypeId());
 
         place.setName(placeRequest.getName());
         place.setAddress(placeRequest.getAddress());
