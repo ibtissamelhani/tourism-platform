@@ -7,6 +7,7 @@ import org.ibtissam.dadesadventures.exception.place.PlaceNotFoundException;
 import org.ibtissam.dadesadventures.exception.place.TypeAlreadyExistException;
 import org.ibtissam.dadesadventures.exception.place.TypeNotFoundException;
 import org.ibtissam.dadesadventures.exception.user.EmailAlreadyExistException;
+import org.ibtissam.dadesadventures.exception.user.GuideIsBusyException;
 import org.ibtissam.dadesadventures.exception.user.InvalidCredentialsException;
 import org.ibtissam.dadesadventures.exception.user.UserNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -44,6 +45,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<String> handleUserNotFoundException(UserNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+    @ExceptionHandler(GuideIsBusyException.class)
+    public ResponseEntity<String> handleGuideIsBusyException(GuideIsBusyException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
     }
 
     // handel category exceptions
