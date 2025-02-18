@@ -32,9 +32,15 @@ public class ActivityController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteActivity(@PathVariable UUID id) {
+    public ResponseEntity<String> deleteActivity(@PathVariable UUID id) {
         activityService.deleteActivity(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok("Activity deleted successfully.");
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<ActivityResponse> updateActivity(@PathVariable UUID id,
+                                                           @Valid @RequestBody ActivityRequest request) {
+        ActivityResponse response = activityService.updateActivity(id, request);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
 }

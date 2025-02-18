@@ -12,4 +12,5 @@ public interface ActivityService {
     ActivityResponse createActivity(ActivityRequest request);
     Page<ActivityResponse> getAllActivities(Pageable pageable);
     public void deleteActivity(UUID id);
+    ActivityResponse updateActivity(UUID id, ActivityRequest request);
 }

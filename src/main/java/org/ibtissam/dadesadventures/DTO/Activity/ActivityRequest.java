@@ -40,5 +40,7 @@ public class ActivityRequest {
 
     private UUID guideId;
 
+    private Boolean availability;
+
     private List<String> imageUrls;
 }

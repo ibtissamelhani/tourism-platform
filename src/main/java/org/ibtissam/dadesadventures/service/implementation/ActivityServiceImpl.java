@@ -83,4 +83,49 @@ public class ActivityServiceImpl implements ActivityService {
         }
         activityRepository.deleteById(id);
     }
+
+    @Override
+    public ActivityResponse updateActivity(UUID id, ActivityRequest request) {
+        Activity activity = activityRepository.findById(id)
+                .orElseThrow(() -> new ActivityNotFoundException("Activity not found with ID: " + id));
+
+        // Retrieve associated entities
+        Category category = categoryService.findById(request.getCategoryId());
+        Place place = placeService.findById(request.getPlaceId());
+
+        User guide = null;
+        if (request.getGuideId() != null) {
+            guide = userService.findById(request.getGuideId());
+        }
+
+        activity.setName(request.getName());
+        activity.setDescription(request.getDescription());
+        activity.setCapacity(request.getCapacity());
+        activity.setPrice(request.getPrice());
+        activity.setDate(request.getDate());
+        activity.setAvailability(request.getAvailability());
+        activity.setCategory(category);
+        activity.setPlace(place);
+        activity.setGuide(guide);
+        activity.setUpdatedAt(LocalDateTime.now());
+
+        // Update images if image URLs are provided
+        if (request.getImageUrls() != null) {
+            activity.getImages().clear();
+            request.getImageUrls().forEach(url -> {
+                ActivityImage image = ActivityImage.builder()
+                        .imageUrl(url)
+                        .activity(activity)
+                        .build();
+                activity.getImages().add(image);
+            });
+        }
+
+        // Save the updated activity
+        Activity updatedActivity = activityRepository.save(activity);
+        return activityMapper.toResponse(updatedActivity);
+    }
+
+
+
 }
