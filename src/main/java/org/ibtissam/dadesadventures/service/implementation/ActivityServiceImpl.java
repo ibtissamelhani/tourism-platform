@@ -5,11 +5,13 @@ import org.ibtissam.dadesadventures.DTO.Activity.ActivityDTOMapper;
 import org.ibtissam.dadesadventures.DTO.Activity.ActivityRequest;
 import org.ibtissam.dadesadventures.DTO.Activity.ActivityResponse;
 import org.ibtissam.dadesadventures.domain.entities.*;
+import org.ibtissam.dadesadventures.repository.ActivityImageRepository;
 import org.ibtissam.dadesadventures.repository.ActivityRepository;
 import org.ibtissam.dadesadventures.service.*;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,7 +24,9 @@ public class ActivityServiceImpl implements ActivityService {
     private final PlaceService placeService;
     private final UserService userService;
     private final ActivityDTOMapper activityMapper;
+    private final ActivityImageRepository activityImageRepository;
 
+    @Override
     public ActivityResponse createActivity(ActivityRequest request) {
         Category category = categoryService.findById(request.getCategoryId());
 
@@ -32,13 +36,21 @@ public class ActivityServiceImpl implements ActivityService {
         if (request.getGuideId() != null) {
             guide = userService.findById(request.getGuideId());
         }
+        Activity activity = Activity.builder()
+                .name(request.getName())
+                .date(request.getDate())
+                .category(category)
+                .place(place)
+                .guide(guide)
+                .availability(true)
+                .capacity(request.getCapacity())
+                .description(request.getDescription())
+                .price(request.getPrice())
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
+                .images(new ArrayList<>())
+                .build();
 
-        Activity activity = activityMapper.toEntity(request);
-        activity.setCategory(category);
-        activity.setPlace(place);
-        activity.setGuide(guide);
-        activity.setCreatedAt(LocalDateTime.now());
-        activity.setUpdatedAt(LocalDateTime.now());
 
         if (request.getImageUrls() != null && !request.getImageUrls().isEmpty()) {
             request.getImageUrls().forEach(url -> {
@@ -51,6 +63,7 @@ public class ActivityServiceImpl implements ActivityService {
         }
 
         Activity savedActivity = activityRepository.save(activity);
+
         return activityMapper.toResponse(savedActivity);
     }
 }

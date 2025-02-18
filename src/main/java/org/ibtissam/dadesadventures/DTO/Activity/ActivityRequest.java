@@ -32,9 +32,6 @@ public class ActivityRequest {
     @Future(message = "Date must be in the future")
     private LocalDateTime date;
 
-    @NotNull(message = "Availability status is required")
-    private Boolean availability;
-
     @NotNull(message = "Category ID is required")
     private UUID categoryId;
 

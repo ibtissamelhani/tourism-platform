@@ -15,9 +15,9 @@ public interface ActivityDTOMapper {
     @Mapping(target = "guide.id", source = "guideId", ignore = true) // Guide is optional
     Activity toEntity(ActivityRequest request);
 
-    @Mapping(target = "categoryName", source = "category.name")
-    @Mapping(target = "placeName", source = "place.name")
-    @Mapping(target = "guideName", source = "guide.email", defaultValue = "No Guide Assigned")
+    @Mapping(target = "category", source = "category.name")
+    @Mapping(target = "place", source = "place.name")
+    @Mapping(target = "guide", source = "guide.email", defaultValue = "No Guide Assigned")
     @Mapping(target = "imageUrls", expression = "java(activity.getImages().stream().map(img -> img.getImageUrl()).toList())")
     ActivityResponse toResponse(Activity activity);
 
