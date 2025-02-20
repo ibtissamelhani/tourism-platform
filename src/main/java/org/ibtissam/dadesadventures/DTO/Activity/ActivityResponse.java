@@ -21,6 +21,8 @@ public class ActivityResponse {
     private Boolean availability;
     private String category;
     private String place;
-    private String guide;
+    private String guideFirstName;
+    private String guideLastName;
+    private String guideEmail;
     private List<String> imageUrls;
 }

@@ -6,6 +6,7 @@ import org.ibtissam.dadesadventures.exception.category.CategoryNotFoundException
 import org.ibtissam.dadesadventures.exception.place.PlaceNotFoundException;
 import org.ibtissam.dadesadventures.exception.place.TypeAlreadyExistException;
 import org.ibtissam.dadesadventures.exception.place.TypeNotFoundException;
+import org.ibtissam.dadesadventures.exception.reservation.ReservationNotFoundException;
 import org.ibtissam.dadesadventures.exception.user.EmailAlreadyExistException;
 import org.ibtissam.dadesadventures.exception.user.GuideIsBusyException;
 import org.ibtissam.dadesadventures.exception.user.InvalidCredentialsException;
@@ -79,13 +80,14 @@ public class GlobalExceptionHandler {
     }
 
     // handel activity exceptions
-
     @ExceptionHandler(ActivityNotFoundException.class)
     public ResponseEntity<String> handleActivityNotFoundException(ActivityNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 
-
-
-
+    // handel reservation exceptions
+    @ExceptionHandler(ReservationNotFoundException.class)
+    public ResponseEntity<String> handleReservationNotFoundException(ReservationNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
 }
