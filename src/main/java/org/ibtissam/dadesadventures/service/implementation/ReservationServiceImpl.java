@@ -13,6 +13,8 @@ import org.ibtissam.dadesadventures.repository.ReservationRepository;
 import org.ibtissam.dadesadventures.service.ActivityService;
 import org.ibtissam.dadesadventures.service.ReservationService;
 import org.ibtissam.dadesadventures.service.UserService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -70,6 +72,12 @@ public class ReservationServiceImpl implements ReservationService {
         return reservations.stream()
                 .map(reservationDTOMapper::toResponse)
                 .toList();
+    }
+
+    @Override
+    public Page<ReservationResponse> getAllReservations(Pageable pageable) {
+        Page<Reservation> reservations = reservationRepository.findAll(pageable);
+        return reservations.map(reservationDTOMapper::toResponse);
     }
 
 }
