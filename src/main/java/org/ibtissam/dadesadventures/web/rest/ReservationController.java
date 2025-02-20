@@ -44,4 +44,10 @@ public class ReservationController {
         Page<ReservationResponse> reservations = reservationService.getAllReservations(pageable);
         return ResponseEntity.ok(reservations);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ReservationResponse> getReservationById(@PathVariable UUID id) {
+        ReservationResponse reservationResponse = reservationService.getReservationById(id);
+        return ResponseEntity.ok(reservationResponse);
+    }
 }

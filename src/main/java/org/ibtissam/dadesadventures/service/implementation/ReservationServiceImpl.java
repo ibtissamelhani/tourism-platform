@@ -9,6 +9,7 @@ import org.ibtissam.dadesadventures.domain.entities.Reservation;
 import org.ibtissam.dadesadventures.domain.entities.User;
 import org.ibtissam.dadesadventures.domain.enums.ReservationState;
 import org.ibtissam.dadesadventures.exception.activity.ActivityNotAvailableException;
+import org.ibtissam.dadesadventures.exception.reservation.ReservationNotFoundException;
 import org.ibtissam.dadesadventures.repository.ReservationRepository;
 import org.ibtissam.dadesadventures.service.ActivityService;
 import org.ibtissam.dadesadventures.service.ReservationService;
@@ -78,6 +79,13 @@ public class ReservationServiceImpl implements ReservationService {
     public Page<ReservationResponse> getAllReservations(Pageable pageable) {
         Page<Reservation> reservations = reservationRepository.findAll(pageable);
         return reservations.map(reservationDTOMapper::toResponse);
+    }
+
+    @Override
+    public ReservationResponse getReservationById(UUID id) {
+        Reservation reservation = reservationRepository.findById(id)
+                .orElseThrow(() -> new ReservationNotFoundException("Reservation not found with ID: " + id));
+        return reservationDTOMapper.toResponse(reservation);
     }
 
 }

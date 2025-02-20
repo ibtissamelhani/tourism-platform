@@ -12,4 +12,5 @@ public interface ReservationService {
     ReservationResponse createReservation(ReservationRequest reservationRequest);
     List<ReservationResponse> getReservationsByActivityId(UUID activityId);
     Page<ReservationResponse> getAllReservations(Pageable pageable);
+    ReservationResponse getReservationById(UUID id);
 }
