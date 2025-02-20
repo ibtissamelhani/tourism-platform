@@ -39,6 +39,9 @@ public class Activity {
     @Column(nullable = false)
     private Boolean availability;
 
+    @OneToMany(mappedBy = "activity", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private List<Reservation> reservations = new ArrayList<>();
+
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;

@@ -8,8 +8,8 @@ import org.ibtissam.dadesadventures.domain.entities.Activity;
 import org.ibtissam.dadesadventures.domain.entities.Reservation;
 import org.ibtissam.dadesadventures.domain.entities.User;
 import org.ibtissam.dadesadventures.domain.enums.ReservationState;
+import org.ibtissam.dadesadventures.exception.activity.ActivityNotAvailableException;
 import org.ibtissam.dadesadventures.repository.ReservationRepository;
-import org.ibtissam.dadesadventures.repository.UserRepository;
 import org.ibtissam.dadesadventures.service.ActivityService;
 import org.ibtissam.dadesadventures.service.ReservationService;
 import org.ibtissam.dadesadventures.service.UserService;
@@ -18,6 +18,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -44,6 +45,10 @@ public class ReservationServiceImpl implements ReservationService {
 
         Activity activity = activityService.findById(reservationRequest.getActivityId());
 
+        if (!activity.getAvailability()){
+            throw new ActivityNotAvailableException("Activity is not available");
+        }
+
         Reservation reservation = Reservation.builder()
                 .user(user)
                 .activity(activity)
@@ -58,4 +63,13 @@ public class ReservationServiceImpl implements ReservationService {
         Reservation savedReservation = reservationRepository.save(reservation);
         return reservationDTOMapper.toResponse(savedReservation);
     }
+
+    @Override
+    public List<ReservationResponse> getReservationsByActivityId(UUID activityId) {
+        List<Reservation> reservations = reservationRepository.findByActivityId(activityId);
+        return reservations.stream()
+                .map(reservationDTOMapper::toResponse)
+                .toList();
+    }
+
 }
