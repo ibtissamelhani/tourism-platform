@@ -88,4 +88,12 @@ public class ReservationServiceImpl implements ReservationService {
         return reservationDTOMapper.toResponse(reservation);
     }
 
+    @Override
+    public void deleteReservation(UUID id) {
+        if (!reservationRepository.existsById(id)) {
+            throw new ReservationNotFoundException("Reservation not found with ID: " + id);
+        }
+        reservationRepository.deleteById(id);
+    }
+
 }

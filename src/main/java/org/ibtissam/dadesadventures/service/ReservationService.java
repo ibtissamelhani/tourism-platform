@@ -13,4 +13,5 @@ public interface ReservationService {
     List<ReservationResponse> getReservationsByActivityId(UUID activityId);
     Page<ReservationResponse> getAllReservations(Pageable pageable);
     ReservationResponse getReservationById(UUID id);
+    void deleteReservation(UUID id);
 }
