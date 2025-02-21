@@ -10,3 +10,14 @@ spring:
       file: src/main/docker/compose.yaml
       enabled: true
       lifecycle-management: start_only
+  mail:
+    host: sandbox.smtp.mailtrap.io
+    port: 2525
+    username: c61ba077041431
+    password: f852389a0e9091
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true

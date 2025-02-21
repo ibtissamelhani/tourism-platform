@@ -1,5 +1,6 @@
 package org.ibtissam.dadesadventures.service.implementation;
 
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.ibtissam.dadesadventures.DTO.Reservation.ReservationDTOMapper;
 import org.ibtissam.dadesadventures.DTO.Reservation.ReservationRequest;
@@ -9,6 +10,7 @@ import org.ibtissam.dadesadventures.domain.entities.Reservation;
 import org.ibtissam.dadesadventures.domain.entities.User;
 import org.ibtissam.dadesadventures.domain.enums.ReservationState;
 import org.ibtissam.dadesadventures.exception.activity.ActivityNotAvailableException;
+import org.ibtissam.dadesadventures.exception.reservation.FaildToSendEmail;
 import org.ibtissam.dadesadventures.exception.reservation.ReservationNotFoundException;
 import org.ibtissam.dadesadventures.repository.ReservationRepository;
 import org.ibtissam.dadesadventures.service.ActivityService;
@@ -32,6 +34,7 @@ public class ReservationServiceImpl implements ReservationService {
     private final UserService userService;
     private final ActivityService activityService;
     private final ReservationDTOMapper reservationDTOMapper;
+    private final MailServiceImpl emailService;
 
 
     @Override
@@ -64,6 +67,7 @@ public class ReservationServiceImpl implements ReservationService {
         reservation.calculateTotalPrice();
 
         Reservation savedReservation = reservationRepository.save(reservation);
+        sendReservationConfirmationEmail(user, activity, savedReservation);
         return reservationDTOMapper.toResponse(savedReservation);
     }
 
@@ -96,4 +100,31 @@ public class ReservationServiceImpl implements ReservationService {
         reservationRepository.deleteById(id);
     }
 
+    private void sendReservationConfirmationEmail(User user, Activity activity, Reservation reservation) {
+        String subject = "Reservation Confirmation";
+        String htmlContent = String.format(
+                "<html><body>" +
+                        "<h2>Dear %s,</h2>" +
+                        "<p>Your reservation for the activity <strong>%s</strong> has been confirmed.</p>" +
+                        "<h3>Reservation Details:</h3>" +
+                        "<ul>" +
+                        "<li><strong>Number of Participants:</strong> %d</li>" +
+                        "<li><strong>Total Price:</strong> %.2f</li>" +
+                        "<li><strong>Reservation Date:</strong> %s</li>" +
+                        "</ul>" +
+                        "<p>Thank you for choosing Dades Adventures!</p>" +
+                        "</body></html>",
+                user.getFirstName(),
+                activity.getName(),
+                reservation.getNumberOfParticipants(),
+                reservation.getTotalPrice(),
+                reservation.getReservationDate()
+        );
+
+        try {
+            emailService.sendHtmlEmail(user.getEmail(), subject, htmlContent);
+        } catch (MessagingException e) {
+            throw new FaildToSendEmail("Failed to send email");
+        }
+    }
 }
