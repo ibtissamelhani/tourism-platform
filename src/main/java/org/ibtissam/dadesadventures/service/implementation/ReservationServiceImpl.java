@@ -10,7 +10,7 @@ import org.ibtissam.dadesadventures.domain.entities.Reservation;
 import org.ibtissam.dadesadventures.domain.entities.User;
 import org.ibtissam.dadesadventures.domain.enums.ReservationState;
 import org.ibtissam.dadesadventures.exception.activity.ActivityNotAvailableException;
-import org.ibtissam.dadesadventures.exception.reservation.FaildToSendEmail;
+import org.ibtissam.dadesadventures.exception.reservation.FailedToSendEmailException;
 import org.ibtissam.dadesadventures.exception.reservation.ReservationNotFoundException;
 import org.ibtissam.dadesadventures.repository.ReservationRepository;
 import org.ibtissam.dadesadventures.service.ActivityService;
@@ -21,8 +21,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.context.Context;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
 
@@ -102,29 +104,19 @@ public class ReservationServiceImpl implements ReservationService {
 
     private void sendReservationConfirmationEmail(User user, Activity activity, Reservation reservation) {
         String subject = "Reservation Confirmation";
-        String htmlContent = String.format(
-                "<html><body>" +
-                        "<h2>Dear %s,</h2>" +
-                        "<p>Your reservation for the activity <strong>%s</strong> has been confirmed.</p>" +
-                        "<h3>Reservation Details:</h3>" +
-                        "<ul>" +
-                        "<li><strong>Number of Participants:</strong> %d</li>" +
-                        "<li><strong>Total Price:</strong> %.2f</li>" +
-                        "<li><strong>Reservation Date:</strong> %s</li>" +
-                        "</ul>" +
-                        "<p>Thank you for choosing Dades Adventures!</p>" +
-                        "</body></html>",
-                user.getFirstName(),
-                activity.getName(),
-                reservation.getNumberOfParticipants(),
-                reservation.getTotalPrice(),
-                reservation.getReservationDate()
-        );
+
+        // Create a Thymeleaf context and set variables
+        Context context = new Context();
+        context.setVariable("userFirstName", user.getFirstName());
+        context.setVariable("activityName", activity.getName());
+        context.setVariable("numberOfParticipants", reservation.getNumberOfParticipants());
+        context.setVariable("totalPrice", reservation.getTotalPrice());
+        context.setVariable("reservationDate", reservation.getReservationDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
 
         try {
-            emailService.sendHtmlEmail(user.getEmail(), subject, htmlContent);
+            emailService.sendHtmlEmail(user.getEmail(), subject, "reservation-email-template", context);
         } catch (MessagingException e) {
-            throw new FaildToSendEmail("Failed to send email");
+            throw new FailedToSendEmailException("Failed to send email");
         }
     }
 }
