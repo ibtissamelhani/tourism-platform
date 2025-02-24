@@ -15,7 +15,8 @@ import java.util.UUID;
 public class ReviewResponse {
 
     private UUID id;
-    private User user;
+    private String userFirstName;
+    private String userLastName;
     private Integer rating;
     private String comment;
     private LocalDateTime createdAt;

@@ -12,5 +12,7 @@ public interface ReviewDTOMapper {
     @Mapping(target = "updatedAt", expression = "java(java.time.LocalDateTime.now())")
     Review toEntity(ReviewRequest reviewRequest);
 
+    @Mapping(target = "userFirstName", source = "user.firstName")
+    @Mapping(target = "userLastName", source = "user.lastName")
     ReviewResponse toResponse(Review review);
 }
