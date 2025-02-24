@@ -2,9 +2,16 @@ package org.ibtissam.dadesadventures.DTO.Review;
 
 import jakarta.validation.constraints.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
 import java.util.UUID;
 
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ReviewRequest {
     @NotNull(message = "User ID is required")
     private UUID userId;
