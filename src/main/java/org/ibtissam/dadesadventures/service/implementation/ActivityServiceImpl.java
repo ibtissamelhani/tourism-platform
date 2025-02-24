@@ -6,14 +6,19 @@ import org.ibtissam.dadesadventures.DTO.Activity.ActivityRequest;
 import org.ibtissam.dadesadventures.DTO.Activity.ActivityResponse;
 import org.ibtissam.dadesadventures.DTO.Activity.ActivitySearchDTO;
 import org.ibtissam.dadesadventures.domain.entities.*;
+import org.ibtissam.dadesadventures.domain.enums.ActivityStatus;
+import org.ibtissam.dadesadventures.exception.activity.ActivityDeletionException;
 import org.ibtissam.dadesadventures.exception.activity.ActivityNotFoundException;
+import org.ibtissam.dadesadventures.exception.reservation.FailedToSendEmailException;
 import org.ibtissam.dadesadventures.exception.user.GuideIsBusyException;
+import org.ibtissam.dadesadventures.repository.ActivityImageRepository;
 import org.ibtissam.dadesadventures.repository.ActivityRepository;
 import org.ibtissam.dadesadventures.service.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.context.Context;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -25,10 +30,12 @@ import java.util.UUID;
 public class ActivityServiceImpl implements ActivityService {
 
     private final ActivityRepository activityRepository;
+    private final ActivityImageRepository activityImageRepository;
     private final CategoryService categoryService;
     private final PlaceService placeService;
     private final UserService userService;
     private final ActivityDTOMapper activityMapper;
+    private final MailService mailService;
 
     @Override
     public ActivityResponse createActivity(ActivityRequest request) {
@@ -52,6 +59,7 @@ public class ActivityServiceImpl implements ActivityService {
                 .place(place)
                 .guide(guide)
                 .availability(true)
+                .status(ActivityStatus.ACTIVE)
                 .capacity(request.getCapacity())
                 .description(request.getDescription())
                 .price(request.getPrice())
@@ -84,10 +92,17 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     public void deleteActivity(UUID id) {
-        if (!activityRepository.existsById(id)) {
-            throw new ActivityNotFoundException("Activity not found with ID: " + id);
+        Activity activity = activityRepository.findById(id)
+                .orElseThrow(() -> new ActivityNotFoundException("Activity not found with ID: " + id));
+
+        if (activity.getReservations() != null && !activity.getReservations().isEmpty()) {
+            throw new ActivityDeletionException("Cannot delete activity with registered participants. Please cancel the activity instead.");
         }
-        activityRepository.deleteById(id);
+
+        if (activity.getImages() != null && !activity.getImages().isEmpty()) {
+            activityImageRepository.deleteAll(activity.getImages());
+        }
+        activityRepository.delete(activity);
     }
 
     @Override
@@ -111,6 +126,7 @@ public class ActivityServiceImpl implements ActivityService {
         activity.setRegistrationDeadline(request.getRegistrationDeadline());
         activity.setAvailability(request.getAvailability());
         activity.setCategory(category);
+        activity.setStatus(ActivityStatus.valueOf(request.getStatus()));
         activity.setPlace(place);
         activity.setGuide(guide);
         activity.setUpdatedAt(LocalDateTime.now());
@@ -150,6 +166,45 @@ public class ActivityServiceImpl implements ActivityService {
     public Activity findById(UUID id) {
         return activityRepository.findById(id)
                 .orElseThrow(() -> new ActivityNotFoundException("activity not found"));
+    }
+
+
+    @Override
+    public void cancelActivity(UUID activityId) {
+        Activity activity = activityRepository.findById(activityId)
+                .orElseThrow(() -> new ActivityNotFoundException("Activity not found with ID: " + activityId));
+
+        // Update the activity status to CANCELED
+        activity.setStatus(ActivityStatus.CANCELED);
+        activityRepository.save(activity);
+
+        // Notify all participants by email
+        notifyParticipantsOfCancellation(activity);
+    }
+
+    // Notify all participants of the cancellation
+    private void notifyParticipantsOfCancellation(Activity activity) {
+        List<Reservation> reservations = activity.getReservations();
+
+        for (Reservation reservation : reservations) {
+            User user = reservation.getUser();
+            sendCancellationEmail(user, activity);
+        }
+    }
+
+    // Send cancellation email to a participant using Thymeleaf template
+    private void sendCancellationEmail(User user, Activity activity) {
+        String subject = "Activity Cancellation Notification";
+
+        Context context = new Context();
+        context.setVariable("userFirstName", user.getFirstName());
+        context.setVariable("activityName", activity.getName());
+
+        try {
+            mailService.sendHtmlEmail(user.getEmail(), subject, "activity-cancellation-template", context);
+        } catch (Exception e) {
+            throw new FailedToSendEmailException("Failed to send cancellation email to user: " + user.getEmail());
+        }
     }
 
 }

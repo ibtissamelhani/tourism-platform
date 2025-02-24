@@ -1,6 +1,7 @@
 package org.ibtissam.dadesadventures.DTO.Activity;
 
 import lombok.*;
+import org.ibtissam.dadesadventures.domain.enums.ActivityStatus;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -21,6 +22,7 @@ public class ActivityResponse {
     private LocalDateTime registrationDeadline;
     private Boolean availability;
     private String category;
+    private ActivityStatus status;
     private String place;
     private String guideFirstName;
     private String guideLastName;
