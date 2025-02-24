@@ -2,6 +2,9 @@ package org.ibtissam.dadesadventures.DTO.Activity;
 
 import jakarta.validation.constraints.*;
 import lombok.*;
+import org.ibtissam.dadesadventures.domain.enums.ActivityStatus;
+import org.ibtissam.dadesadventures.domain.enums.ReservationState;
+import org.ibtissam.dadesadventures.validation.EnumValue;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -41,6 +44,9 @@ public class ActivityRequest {
 
     @NotNull(message = "Place ID is required")
     private UUID placeId;
+
+    @EnumValue(enumClass = ActivityStatus.class, message = "activity status")
+    private String status;
 
     private UUID guideId;
 

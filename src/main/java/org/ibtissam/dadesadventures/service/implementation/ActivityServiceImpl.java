@@ -6,8 +6,11 @@ import org.ibtissam.dadesadventures.DTO.Activity.ActivityRequest;
 import org.ibtissam.dadesadventures.DTO.Activity.ActivityResponse;
 import org.ibtissam.dadesadventures.DTO.Activity.ActivitySearchDTO;
 import org.ibtissam.dadesadventures.domain.entities.*;
+import org.ibtissam.dadesadventures.domain.enums.ActivityStatus;
+import org.ibtissam.dadesadventures.exception.activity.ActivityDeletionException;
 import org.ibtissam.dadesadventures.exception.activity.ActivityNotFoundException;
 import org.ibtissam.dadesadventures.exception.user.GuideIsBusyException;
+import org.ibtissam.dadesadventures.repository.ActivityImageRepository;
 import org.ibtissam.dadesadventures.repository.ActivityRepository;
 import org.ibtissam.dadesadventures.service.*;
 import org.springframework.data.domain.Page;
@@ -25,6 +28,7 @@ import java.util.UUID;
 public class ActivityServiceImpl implements ActivityService {
 
     private final ActivityRepository activityRepository;
+    private final ActivityImageRepository activityImageRepository;
     private final CategoryService categoryService;
     private final PlaceService placeService;
     private final UserService userService;
@@ -52,6 +56,7 @@ public class ActivityServiceImpl implements ActivityService {
                 .place(place)
                 .guide(guide)
                 .availability(true)
+                .status(ActivityStatus.ACTIVE)
                 .capacity(request.getCapacity())
                 .description(request.getDescription())
                 .price(request.getPrice())
@@ -84,10 +89,17 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     public void deleteActivity(UUID id) {
-        if (!activityRepository.existsById(id)) {
-            throw new ActivityNotFoundException("Activity not found with ID: " + id);
+        Activity activity = activityRepository.findById(id)
+                .orElseThrow(() -> new ActivityNotFoundException("Activity not found with ID: " + id));
+
+        if (activity.getReservations() != null && !activity.getReservations().isEmpty()) {
+            throw new ActivityDeletionException("Cannot delete activity with registered participants. Please cancel the activity instead.");
         }
-        activityRepository.deleteById(id);
+
+        if (activity.getImages() != null && !activity.getImages().isEmpty()) {
+            activityImageRepository.deleteAll(activity.getImages());
+        }
+        activityRepository.delete(activity);
     }
 
     @Override
@@ -111,6 +123,7 @@ public class ActivityServiceImpl implements ActivityService {
         activity.setRegistrationDeadline(request.getRegistrationDeadline());
         activity.setAvailability(request.getAvailability());
         activity.setCategory(category);
+        activity.setStatus(ActivityStatus.valueOf(request.getStatus()));
         activity.setPlace(place);
         activity.setGuide(guide);
         activity.setUpdatedAt(LocalDateTime.now());

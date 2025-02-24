@@ -1,5 +1,6 @@
 package org.ibtissam.dadesadventures.web.errors;
 
+import org.ibtissam.dadesadventures.exception.activity.ActivityDeletionException;
 import org.ibtissam.dadesadventures.exception.activity.ActivityNotFoundException;
 import org.ibtissam.dadesadventures.exception.category.CategoryAlreadyExistException;
 import org.ibtissam.dadesadventures.exception.category.CategoryNotFoundException;
@@ -83,6 +84,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ActivityNotFoundException.class)
     public ResponseEntity<String> handleActivityNotFoundException(ActivityNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(ActivityDeletionException.class)
+    public ResponseEntity<String> handleActivityDeletionException(ActivityDeletionException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
     }
 
     // handel reservation exceptions

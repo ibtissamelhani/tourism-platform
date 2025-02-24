@@ -2,6 +2,7 @@ package org.ibtissam.dadesadventures.domain.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.ibtissam.dadesadventures.domain.enums.ActivityStatus;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -60,6 +61,8 @@ public class Activity {
     @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ActivityImage> images = new ArrayList<>();
 
+    @Column(nullable = false)
+    private ActivityStatus status;
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
