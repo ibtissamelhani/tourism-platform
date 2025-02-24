@@ -8,7 +8,6 @@ import org.ibtissam.dadesadventures.DTO.Activity.ActivitySearchDTO;
 import org.ibtissam.dadesadventures.domain.entities.*;
 import org.ibtissam.dadesadventures.exception.activity.ActivityNotFoundException;
 import org.ibtissam.dadesadventures.exception.user.GuideIsBusyException;
-import org.ibtissam.dadesadventures.repository.ActivityImageRepository;
 import org.ibtissam.dadesadventures.repository.ActivityRepository;
 import org.ibtissam.dadesadventures.service.*;
 import org.springframework.data.domain.Page;
@@ -30,7 +29,6 @@ public class ActivityServiceImpl implements ActivityService {
     private final PlaceService placeService;
     private final UserService userService;
     private final ActivityDTOMapper activityMapper;
-    private final ActivityImageRepository activityImageRepository;
 
     @Override
     public ActivityResponse createActivity(ActivityRequest request) {
@@ -49,6 +47,7 @@ public class ActivityServiceImpl implements ActivityService {
         Activity activity = Activity.builder()
                 .name(request.getName())
                 .date(request.getDate())
+                .registrationDeadline(request.getRegistrationDeadline())
                 .category(category)
                 .place(place)
                 .guide(guide)
@@ -109,6 +108,7 @@ public class ActivityServiceImpl implements ActivityService {
         activity.setCapacity(request.getCapacity());
         activity.setPrice(request.getPrice());
         activity.setDate(request.getDate());
+        activity.setRegistrationDeadline(request.getRegistrationDeadline());
         activity.setAvailability(request.getAvailability());
         activity.setCategory(category);
         activity.setPlace(place);

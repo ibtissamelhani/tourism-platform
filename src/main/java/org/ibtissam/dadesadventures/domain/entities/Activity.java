@@ -54,6 +54,9 @@ public class Activity {
     @JoinColumn(name = "guide_id", nullable = true)
     private User guide;
 
+    @Column(nullable = false)
+    private LocalDateTime registrationDeadline;
+
     @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ActivityImage> images = new ArrayList<>();
 

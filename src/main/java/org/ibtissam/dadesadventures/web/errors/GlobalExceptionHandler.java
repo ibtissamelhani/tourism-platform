@@ -6,8 +6,7 @@ import org.ibtissam.dadesadventures.exception.category.CategoryNotFoundException
 import org.ibtissam.dadesadventures.exception.place.PlaceNotFoundException;
 import org.ibtissam.dadesadventures.exception.place.TypeAlreadyExistException;
 import org.ibtissam.dadesadventures.exception.place.TypeNotFoundException;
-import org.ibtissam.dadesadventures.exception.reservation.FailedToSendEmailException;
-import org.ibtissam.dadesadventures.exception.reservation.ReservationNotFoundException;
+import org.ibtissam.dadesadventures.exception.reservation.*;
 import org.ibtissam.dadesadventures.exception.user.EmailAlreadyExistException;
 import org.ibtissam.dadesadventures.exception.user.GuideIsBusyException;
 import org.ibtissam.dadesadventures.exception.user.InvalidCredentialsException;
@@ -95,5 +94,15 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(FailedToSendEmailException.class)
     public ResponseEntity<String> handleFailedToSendEmailException(FailedToSendEmailException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(PaymentFailedException.class)
+    public ResponseEntity<String> handlePaymentFailedException(PaymentFailedException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(RegistrationClosedException.class)
+    public ResponseEntity<String> handleRegistrationClosedException(RegistrationClosedException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
     }
 }

@@ -12,4 +12,9 @@ public interface ActivityRepository  extends JpaRepository<Activity, UUID>, Acti
 
     @Query("SELECT COUNT(a) > 0 FROM Activity a WHERE a.guide.id = :guideId AND a.date = :date")
     boolean isGuideBusy(@Param("guideId") UUID guideId, @Param("date") LocalDateTime date);
+
+    @Query("SELECT CASE WHEN COUNT(a) > 0 THEN true ELSE false END FROM Activity a " +
+            "WHERE a.id = :activityId AND a.date > :limitDate")
+    boolean isActivityOpenForRegistration(@Param("activityId") UUID activityId,
+                                          @Param("limitDate") LocalDateTime limitDate);
 }

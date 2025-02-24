@@ -15,6 +15,7 @@ public interface ActivityDTOMapper {
     @Mapping(target = "guide.id", source = "guideId", ignore = true)
     Activity toEntity(ActivityRequest request);
 
+
     @Mapping(target = "category", source = "category.name")
     @Mapping(target = "place", source = "place.name")
     @Mapping(target = "guideEmail", source = "guide.email", defaultValue = "No Guide Assigned")

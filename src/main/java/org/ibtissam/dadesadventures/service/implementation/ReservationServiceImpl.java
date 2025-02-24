@@ -12,9 +12,7 @@ import org.ibtissam.dadesadventures.domain.entities.Reservation;
 import org.ibtissam.dadesadventures.domain.entities.User;
 import org.ibtissam.dadesadventures.domain.enums.ReservationState;
 import org.ibtissam.dadesadventures.exception.activity.ActivityNotAvailableException;
-import org.ibtissam.dadesadventures.exception.reservation.FailedToSendEmailException;
-import org.ibtissam.dadesadventures.exception.reservation.PaymentFailedException;
-import org.ibtissam.dadesadventures.exception.reservation.ReservationNotFoundException;
+import org.ibtissam.dadesadventures.exception.reservation.*;
 import org.ibtissam.dadesadventures.repository.ReservationRepository;
 import org.ibtissam.dadesadventures.service.ActivityService;
 import org.ibtissam.dadesadventures.service.ReservationService;
@@ -60,6 +58,12 @@ public class ReservationServiceImpl implements ReservationService {
         if (!activity.getAvailability()){
             throw new ActivityNotAvailableException("Activity is not available");
         }
+
+        LocalDateTime now = LocalDateTime.now();
+        if (now.isAfter(activity.getRegistrationDeadline())) {
+            throw new RegistrationClosedException("Registration is closed for this activity. The deadline was: " + activity.getRegistrationDeadline());
+        }
+
 
         Reservation reservation = Reservation.builder()
                 .user(user)
