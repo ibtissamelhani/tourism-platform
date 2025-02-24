@@ -45,6 +45,9 @@ public class Reservation {
 
     private LocalDateTime updatedAt;
 
+    @Column(nullable = false)
+    private String paymentId;
+
     @PrePersist
     public void prePersist() {
         if (createdAt == null) {
