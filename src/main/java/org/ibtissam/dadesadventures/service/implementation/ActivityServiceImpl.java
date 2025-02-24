@@ -9,6 +9,7 @@ import org.ibtissam.dadesadventures.domain.entities.*;
 import org.ibtissam.dadesadventures.domain.enums.ActivityStatus;
 import org.ibtissam.dadesadventures.exception.activity.ActivityDeletionException;
 import org.ibtissam.dadesadventures.exception.activity.ActivityNotFoundException;
+import org.ibtissam.dadesadventures.exception.reservation.FailedToSendEmailException;
 import org.ibtissam.dadesadventures.exception.user.GuideIsBusyException;
 import org.ibtissam.dadesadventures.repository.ActivityImageRepository;
 import org.ibtissam.dadesadventures.repository.ActivityRepository;
@@ -17,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.context.Context;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -33,6 +35,7 @@ public class ActivityServiceImpl implements ActivityService {
     private final PlaceService placeService;
     private final UserService userService;
     private final ActivityDTOMapper activityMapper;
+    private final MailService mailService;
 
     @Override
     public ActivityResponse createActivity(ActivityRequest request) {
@@ -163,6 +166,45 @@ public class ActivityServiceImpl implements ActivityService {
     public Activity findById(UUID id) {
         return activityRepository.findById(id)
                 .orElseThrow(() -> new ActivityNotFoundException("activity not found"));
+    }
+
+
+    @Override
+    public void cancelActivity(UUID activityId) {
+        Activity activity = activityRepository.findById(activityId)
+                .orElseThrow(() -> new ActivityNotFoundException("Activity not found with ID: " + activityId));
+
+        // Update the activity status to CANCELED
+        activity.setStatus(ActivityStatus.CANCELED);
+        activityRepository.save(activity);
+
+        // Notify all participants by email
+        notifyParticipantsOfCancellation(activity);
+    }
+
+    // Notify all participants of the cancellation
+    private void notifyParticipantsOfCancellation(Activity activity) {
+        List<Reservation> reservations = activity.getReservations();
+
+        for (Reservation reservation : reservations) {
+            User user = reservation.getUser();
+            sendCancellationEmail(user, activity);
+        }
+    }
+
+    // Send cancellation email to a participant using Thymeleaf template
+    private void sendCancellationEmail(User user, Activity activity) {
+        String subject = "Activity Cancellation Notification";
+
+        Context context = new Context();
+        context.setVariable("userFirstName", user.getFirstName());
+        context.setVariable("activityName", activity.getName());
+
+        try {
+            mailService.sendHtmlEmail(user.getEmail(), subject, "activity-cancellation-template", context);
+        } catch (Exception e) {
+            throw new FailedToSendEmailException("Failed to send cancellation email to user: " + user.getEmail());
+        }
     }
 
 }

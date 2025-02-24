@@ -52,4 +52,10 @@ public class ActivityController {
 
         return ResponseEntity.ok(activityService.searchActivities(searchDTO, pageable));
     }
+
+    @PostMapping("/cancel/{id}")
+    public ResponseEntity<String> cancelActivity(@PathVariable UUID id) {
+        activityService.cancelActivity(id);
+        return ResponseEntity.ok("Activity cancelled successfully.");
+    }
 }

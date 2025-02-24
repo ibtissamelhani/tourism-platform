@@ -18,4 +18,5 @@ public interface ActivityService {
     ActivityResponse updateActivity(UUID id, ActivityRequest request);
     Page<ActivityResponse> searchActivities(ActivitySearchDTO searchDTO, Pageable pageable);
     Activity findById(UUID id);
+    void cancelActivity(UUID activityId);
 }
