@@ -1,5 +1,7 @@
 package org.ibtissam.dadesadventures.service.implementation;
 
+import com.stripe.exception.StripeException;
+import com.stripe.model.PaymentIntent;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.ibtissam.dadesadventures.DTO.Reservation.ReservationDTOMapper;
@@ -11,6 +13,7 @@ import org.ibtissam.dadesadventures.domain.entities.User;
 import org.ibtissam.dadesadventures.domain.enums.ReservationState;
 import org.ibtissam.dadesadventures.exception.activity.ActivityNotAvailableException;
 import org.ibtissam.dadesadventures.exception.reservation.FailedToSendEmailException;
+import org.ibtissam.dadesadventures.exception.reservation.PaymentFailedException;
 import org.ibtissam.dadesadventures.exception.reservation.ReservationNotFoundException;
 import org.ibtissam.dadesadventures.repository.ReservationRepository;
 import org.ibtissam.dadesadventures.service.ActivityService;
@@ -37,6 +40,7 @@ public class ReservationServiceImpl implements ReservationService {
     private final ActivityService activityService;
     private final ReservationDTOMapper reservationDTOMapper;
     private final MailServiceImpl emailService;
+    private final PaymentServiceImpl paymentService;
 
 
     @Override
@@ -67,6 +71,17 @@ public class ReservationServiceImpl implements ReservationService {
                 .build();
 
         reservation.calculateTotalPrice();
+
+        try {
+            PaymentIntent paymentIntent = paymentService.createPaymentIntent(
+                    (long) (reservation.getTotalPrice() * 100),
+                    "usd",
+                    "Reservation for " + activity.getName()
+            );
+            reservation.setPaymentId(paymentIntent.getId());
+        } catch (StripeException e) {
+            throw new PaymentFailedException("Payment failed: " + e.getMessage());
+        }
 
         Reservation savedReservation = reservationRepository.save(reservation);
         sendReservationConfirmationEmail(user, activity, savedReservation);

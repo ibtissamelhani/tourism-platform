@@ -5,6 +5,7 @@ spring:
         default_schema: public
         hbm2ddl:
           auto: update
+
   docker:
     compose:
       file: src/main/docker/compose.yaml
@@ -21,3 +22,7 @@ spring:
           auth: true
           starttls:
             enable: true
+
+stripe:
+  public-key: pk_test_51Qvzd1KzrUVggwsvZasnL4AQgki0o37GyXkXWkRbCzK6fIDtSjQuzreKMLM9mwB6kQ4gQO570gXWBj4ym1le6Ynv00uOmQCTWX
+  secret-key: sk_test_51Qvzd1KzrUVggwsv8K6psxmOQ3lXZjvUsNeZbOcSFgkaay73WFQCwy8eEaiLZrCb6uwz6muItePWC1MN3rsY7Qil00WzrKMJP3
