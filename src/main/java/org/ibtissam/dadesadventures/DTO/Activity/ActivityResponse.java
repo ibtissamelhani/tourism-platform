@@ -18,6 +18,7 @@ public class ActivityResponse {
     private Integer capacity;
     private Double price;
     private LocalDateTime date;
+    private LocalDateTime registrationDeadline;
     private Boolean availability;
     private String category;
     private String place;

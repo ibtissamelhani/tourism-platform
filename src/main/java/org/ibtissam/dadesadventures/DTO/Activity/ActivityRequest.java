@@ -32,6 +32,10 @@ public class ActivityRequest {
     @Future(message = "Date must be in the future")
     private LocalDateTime date;
 
+    @NotNull(message = "Deadline date is required")
+    @Future(message = "Deadline must be in the future")
+    private LocalDateTime registrationDeadline;
+
     @NotNull(message = "Category ID is required")
     private UUID categoryId;
 
@@ -43,4 +47,9 @@ public class ActivityRequest {
     private Boolean availability;
 
     private List<String> imageUrls;
+
+    @AssertTrue(message = "Registration deadline must be before the activity date")
+    public boolean isDeadlineValid() {
+        return registrationDeadline == null || date == null || registrationDeadline.isBefore(date);
+    }
 }
