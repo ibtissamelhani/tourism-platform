@@ -3,9 +3,9 @@ package org.ibtissam.dadesadventures.web.rest;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.ibtissam.dadesadventures.DTO.AuthDTO.AuthenticationRequest;
-import org.ibtissam.dadesadventures.DTO.AuthDTO.AuthenticationResponse;
-import org.ibtissam.dadesadventures.DTO.AuthDTO.RegisterRequest;
+import org.ibtissam.dadesadventures.DTO.Auth.AuthenticationRequest;
+import org.ibtissam.dadesadventures.DTO.Auth.AuthenticationResponse;
+import org.ibtissam.dadesadventures.DTO.Auth.RegisterRequest;
 import org.ibtissam.dadesadventures.service.AuthService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

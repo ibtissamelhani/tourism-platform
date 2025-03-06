@@ -1,9 +1,9 @@
 package org.ibtissam.dadesadventures.service.implementation;
 
 import lombok.RequiredArgsConstructor;
-import org.ibtissam.dadesadventures.DTO.AuthDTO.AuthenticationRequest;
-import org.ibtissam.dadesadventures.DTO.AuthDTO.AuthenticationResponse;
-import org.ibtissam.dadesadventures.DTO.AuthDTO.RegisterRequest;
+import org.ibtissam.dadesadventures.DTO.Auth.AuthenticationRequest;
+import org.ibtissam.dadesadventures.DTO.Auth.AuthenticationResponse;
+import org.ibtissam.dadesadventures.DTO.Auth.RegisterRequest;
 import org.ibtissam.dadesadventures.domain.entities.User;
 import org.ibtissam.dadesadventures.domain.enums.Role;
 import org.ibtissam.dadesadventures.exception.user.EmailAlreadyExistException;
@@ -15,7 +15,6 @@ import org.ibtissam.dadesadventures.service.AuthService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

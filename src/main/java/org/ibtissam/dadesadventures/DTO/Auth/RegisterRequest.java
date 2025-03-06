@@ -1,9 +1,7 @@
-package org.ibtissam.dadesadventures.DTO.AuthDTO;
+package org.ibtissam.dadesadventures.DTO.Auth;
 
 import jakarta.validation.constraints.*;
 import lombok.*;
-import org.ibtissam.dadesadventures.domain.enums.Role;
-import org.ibtissam.dadesadventures.validation.EnumValue;
 
 @Getter
 @Setter
