@@ -80,10 +80,12 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
+        return role.getAuthorities();
     }
+
     @Override
     public String getUsername() {
         return email;
