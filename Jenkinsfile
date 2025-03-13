@@ -4,7 +4,7 @@ pipeline {
     environment {
         SONARQUBE_URL = 'http://sonarqube:9000'
         SONAR_PROJECT_KEY='DadesAdventures'
-        SONAR_TOKEN = credentials('sonar_token')
+        SONAR_TOKEN = credentials('sonar-token')
         IMAGE_NAME = 'DadesAdventures'
     }
 
