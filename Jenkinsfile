@@ -6,7 +6,7 @@ pipeline {
         SONARQUBE_URL = 'http://sonarqube:9000'
         SONAR_PROJECT_KEY='DadesAdventures'
         SONAR_TOKEN = credentials('sonar-token')
-        IMAGE_NAME = 'DadesAdventures'
+        IMAGE_NAME = 'dadesadventures'
     }
 
     stages {
@@ -58,7 +58,26 @@ pipeline {
                 }
             }
         }
+        stage('Quality Gate') {
+    steps {
+        script {
+            timeout(time: 3, unit: 'MINUTES') {  // Attendre que l'analyse soit terminée
+                def qualityGate = waitForQualityGate()
+                if (qualityGate.status != 'OK') {
+                    error "Quality Gate failed: ${qualityGate.status}"
+                }
+            }
+        }
+    }
+}
 
+stage('Build Docker Image') {
+            steps {
+                script {
+                    sh 'docker build -t ${IMAGE_NAME}:latest .'
+                }
+            }
+        }
         stage('Test') {
             steps {
                 script {
