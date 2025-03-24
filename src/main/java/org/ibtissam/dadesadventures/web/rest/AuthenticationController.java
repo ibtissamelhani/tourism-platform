@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -22,9 +24,11 @@ public class AuthenticationController {
     private final AuthService authenticationService;
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody @Valid RegisterRequest request) {
+    public ResponseEntity<Map<String, String>> register(@RequestBody @Valid RegisterRequest request) {
         authenticationService.register(request);
-        return new ResponseEntity<>("User registered successfully.", HttpStatus.CREATED);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(Map.of("message", "User registered successfully."));
     }
 
     @PostMapping("/authenticate")
