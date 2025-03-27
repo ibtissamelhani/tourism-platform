@@ -61,8 +61,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(CategoryAlreadyExistException.class)
-    public ResponseEntity<String> handleCategoryAlreadyExistException(CategoryAlreadyExistException ex) {
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+    public ResponseEntity<Map<String, String>> handleCategoryAlreadyExistException(CategoryAlreadyExistException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("message", ex.getMessage()));
     }
 
     // handel place exceptions
