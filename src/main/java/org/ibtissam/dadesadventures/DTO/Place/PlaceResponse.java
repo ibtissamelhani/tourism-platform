@@ -15,5 +15,5 @@ public class PlaceResponse {
     private String name;
     private String address;
     private String city;
-    private PlaceType type;
+    private String type;
 }
