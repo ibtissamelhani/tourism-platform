@@ -10,6 +10,6 @@ public interface PlaceDTOMapper {
     @Mapping(target = "id", ignore = true)
     Place toEntity(PlaceRequest placeRequest);
 
-    @Mapping(target = "type", source = "type")
+    @Mapping(target = "type", source = "type.name")
     PlaceResponse toResponse(Place place);
 }
