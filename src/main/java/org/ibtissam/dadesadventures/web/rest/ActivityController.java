@@ -17,13 +17,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/v1/activities")
 @AllArgsConstructor
 public class ActivityController {
     private ActivityService activityService;
 
-    @PreAuthorize("hasAuthority('CREATE_ACTIVITY')")
     @PostMapping
     public ResponseEntity<ActivityResponse> createActivity(@Valid @RequestBody ActivityRequest request) {
         ActivityResponse response = activityService.createActivity(request);
@@ -56,7 +56,7 @@ public class ActivityController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @GetMapping("/search")
+    @PostMapping("/search")
     public ResponseEntity<Page<ActivityResponse>> searchActivities(
             @RequestBody ActivitySearchDTO searchDTO,
             Pageable pageable) {
