@@ -138,4 +138,12 @@ public class ReservationServiceImpl implements ReservationService {
             throw new FailedToSendEmailException("Failed to send email");
         }
     }
+
+    @Override
+    public List<ReservationResponse> findByUser(User user) {
+        List<Reservation> reservations = reservationRepository.findByUser(user);
+        return reservations.stream()
+                .map(reservationDTOMapper::toResponse)
+                .toList();
+    }
 }
