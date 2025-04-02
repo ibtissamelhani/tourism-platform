@@ -39,6 +39,11 @@ public class SecurityConfiguration {
                                     .permitAll();
                             authorizeHttpRequest.requestMatchers(HttpMethod.GET,"/api/v1/activities")
                                     .permitAll();
+                            authorizeHttpRequest.requestMatchers(HttpMethod.GET,"/api/v1/categories")
+                                    .permitAll();
+                            authorizeHttpRequest
+                                    .requestMatchers(HttpMethod.GET, "/api/v1/activities/search").permitAll()
+                                    .requestMatchers(HttpMethod.POST, "/api/v1/activities/search").permitAll();
                             authorizeHttpRequest.requestMatchers("/uploads/**").permitAll();
                             authorizeHttpRequest.anyRequest().authenticated();
                         }
