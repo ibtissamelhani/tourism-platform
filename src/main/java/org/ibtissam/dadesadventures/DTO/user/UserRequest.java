@@ -39,5 +39,5 @@ public class UserRequest {
     @EnumValue(enumClass = Role.class, message = "invalid role")
     private String role;
 
-    private boolean isActive;
+    private Boolean isActive;
 }

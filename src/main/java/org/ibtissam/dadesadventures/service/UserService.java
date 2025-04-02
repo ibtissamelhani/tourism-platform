@@ -5,9 +5,11 @@ import org.ibtissam.dadesadventures.DTO.user.UpdateUser;
 import org.ibtissam.dadesadventures.DTO.user.UserRequest;
 import org.ibtissam.dadesadventures.DTO.user.UserResponse;
 import org.ibtissam.dadesadventures.domain.entities.User;
+import org.ibtissam.dadesadventures.domain.enums.Role;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface UserService {
@@ -18,4 +20,5 @@ public interface UserService {
     UserResponse updateUser(UUID id, UpdateUser userRequest);
     void deleteUser(UUID id);
     User findById(UUID id);
+    List<UserResponse> getUsersByRole(Role role);
 }

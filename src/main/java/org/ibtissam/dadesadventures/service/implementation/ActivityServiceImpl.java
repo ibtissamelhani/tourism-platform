@@ -168,6 +168,13 @@ public class ActivityServiceImpl implements ActivityService {
                 .orElseThrow(() -> new ActivityNotFoundException("activity not found"));
     }
 
+    @Override
+    public ActivityResponse getById(UUID id) {
+        Activity activity = activityRepository.findById(id)
+                .orElseThrow(() -> new ActivityNotFoundException("Activity not found with ID: " + id));
+        return activityMapper.toResponse(activity);
+    }
+
 
     @Override
     public void cancelActivity(UUID activityId) {

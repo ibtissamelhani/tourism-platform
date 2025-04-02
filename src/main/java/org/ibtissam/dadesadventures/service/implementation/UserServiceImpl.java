@@ -82,10 +82,10 @@ public class UserServiceImpl implements UserService {
         user.setFirstName(userRequest.getFirstName() != null ? userRequest.getFirstName() : user.getFirstName());
         user.setLastName(userRequest.getLastName() != null ? userRequest.getLastName() : user.getLastName());
         user.setEmail(userRequest.getEmail() != null ? userRequest.getEmail() : user.getEmail());
-        user.setPassword(userRequest.getPassword() != null ? BCrypt.hashpw(userRequest.getPassword(), BCrypt.gensalt()) : user.getPassword()); // Password should be encoded in a real application
+        //user.setPassword(userRequest.getPassword() != null ? BCrypt.hashpw(userRequest.getPassword(), BCrypt.gensalt()) : user.getPassword()); // Password should be encoded in a real application
         user.setPhoneNumber(userRequest.getPhoneNumber() != null ? userRequest.getPhoneNumber() : user.getPhoneNumber());
         user.setRole(userRequest.getRole() != null ? Role.valueOf(userRequest.getRole()) : user.getRole());
-        user.setActive(userRequest.isActive() != user.isActive() ? userRequest.isActive() : user.isActive());
+        user.setActive(userRequest.getIsActive() != user.isActive() ? userRequest.getIsActive() : user.isActive());
         user.setUpdatedAt(LocalDateTime.now());
 
         User updatedUser = userRepository.save(user);
@@ -99,5 +99,14 @@ public class UserServiceImpl implements UserService {
         }
         userRepository.deleteById(id);
     }
+
+    @Override
+    public List<UserResponse> getUsersByRole(Role role) {
+        List<User> users = userRepository.findByRole(role);
+        return users.stream()
+                .map(userDTOMapper::toUserDTO)
+                .toList();
+    }
+
 
 }

@@ -1,5 +1,6 @@
 package org.ibtissam.dadesadventures.DTO.user;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import org.ibtissam.dadesadventures.domain.enums.Role;
 
@@ -18,6 +19,8 @@ public class UserResponse {
     private String phoneNumber;
     private Role role;
     private boolean isActive;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime createdAt;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime updatedAt;
 }

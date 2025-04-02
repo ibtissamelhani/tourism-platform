@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.ibtissam.dadesadventures.DTO.user.UpdateUser;
 import org.ibtissam.dadesadventures.DTO.user.UserRequest;
 import org.ibtissam.dadesadventures.DTO.user.UserResponse;
+import org.ibtissam.dadesadventures.domain.enums.Role;
 import org.ibtissam.dadesadventures.service.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -57,4 +58,12 @@ public class UserController {
         userService.deleteUser(id);
         return ResponseEntity.ok("deleted successfully");
     }
+
+    @GetMapping("/guides")
+    public ResponseEntity<List<UserResponse>> getAllGuides() {
+        List<UserResponse> guides = userService.getUsersByRole(Role.GUIDE);
+        return ResponseEntity.ok(guides);
+    }
+
+
 }
