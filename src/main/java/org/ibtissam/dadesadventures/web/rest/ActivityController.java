@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -22,6 +23,7 @@ import java.util.UUID;
 public class ActivityController {
     private ActivityService activityService;
 
+    @PreAuthorize("hasAuthority('CREATE_ACTIVITY')")
     @PostMapping
     public ResponseEntity<ActivityResponse> createActivity(@Valid @RequestBody ActivityRequest request) {
         ActivityResponse response = activityService.createActivity(request);
@@ -40,6 +42,7 @@ public class ActivityController {
         return ResponseEntity.ok(response);
     }
 
+    @PreAuthorize("hasAuthority('MANAGE_ACTIVITIES')")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteActivity(@PathVariable UUID id) {
         activityService.deleteActivity(id);
