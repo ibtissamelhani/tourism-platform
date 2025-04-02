@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -30,6 +32,12 @@ public class ActivityController {
     public ResponseEntity<Page<ActivityResponse>> getAllActivities(Pageable pageable) {
         Page<ActivityResponse> responses = activityService.getAllActivities(pageable);
         return ResponseEntity.ok(responses);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ActivityResponse> getActivityById(@PathVariable UUID id) {
+        ActivityResponse response = activityService.getById(id);
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")

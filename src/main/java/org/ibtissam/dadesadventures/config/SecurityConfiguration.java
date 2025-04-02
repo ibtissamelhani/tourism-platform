@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.ibtissam.dadesadventures.security.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -36,6 +37,9 @@ public class SecurityConfiguration {
                         authorizeHttpRequest -> {
                             authorizeHttpRequest.requestMatchers("/api/v1/auth/**")
                                     .permitAll();
+                            authorizeHttpRequest.requestMatchers(HttpMethod.GET,"/api/v1/activities")
+                                    .permitAll();
+                            authorizeHttpRequest.requestMatchers("/uploads/**").permitAll();
                             authorizeHttpRequest.anyRequest().authenticated();
                         }
                 ).sessionManagement(session -> session.sessionCreationPolicy(STATELESS))

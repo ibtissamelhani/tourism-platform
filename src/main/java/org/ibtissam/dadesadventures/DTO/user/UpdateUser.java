@@ -18,11 +18,11 @@ public class UpdateUser {
     @Email(message = "Invalid email format")
     private String email;
 
-    @Size(min = 8, message = "password must be at least 8 characters")
-    @Pattern(
-            regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$",
-            message = "password must contain at least one uppercase letter, one lowercase letter, and one number"
-    )private String password;
+//    @Size(min = 8, message = "password must be at least 8 characters")
+//    @Pattern(
+//            regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$",
+//            message = "password must contain at least one uppercase letter, one lowercase letter, and one number"
+//    )private String password;
 
     @Pattern(
             regexp = "^\\+?[0-9]{10,15}$",
@@ -33,5 +33,5 @@ public class UpdateUser {
     @EnumValue(enumClass = Role.class, message = "invalid role")
     private String role;
 
-    private boolean isActive;
+    private Boolean isActive;
 }
