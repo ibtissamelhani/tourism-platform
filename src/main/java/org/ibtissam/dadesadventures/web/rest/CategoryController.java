@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,21 +29,25 @@ public class CategoryController {
         return categoryService.findAll(pageable);
     }
 
+    @PreAuthorize("hasAuthority('MANAGE_PLACES_CATEGORIES')")
     @GetMapping("/{id}")
     public ResponseEntity<Category> getCategoryById(@PathVariable UUID id) {
         return ResponseEntity.ok(categoryService.findById(id));
     }
 
+    @PreAuthorize("hasAuthority('MANAGE_PLACES_CATEGORIES')")
     @PostMapping
     public ResponseEntity<Category> createCategory(@RequestBody @Valid Category category) {
         return ResponseEntity.status(HttpStatus.CREATED).body(categoryService.create(category));
     }
 
+    @PreAuthorize("hasAuthority('MANAGE_PLACES_CATEGORIES')")
     @PutMapping("/{id}")
     public ResponseEntity<Category> updateCategory(@PathVariable UUID id, @RequestBody @Valid Category category) {
         return ResponseEntity.ok(categoryService.update(id, category));
     }
 
+    @PreAuthorize("hasAuthority('MANAGE_PLACES_CATEGORIES')")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteCategory(@PathVariable UUID id) {
         categoryService.delete(id);
